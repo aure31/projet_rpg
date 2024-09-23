@@ -10,7 +10,7 @@ flags = p.RESIZABLE
 #crée une fenetre de taille (900,500)px dont on peut modifier la taille
 WIN = p.display.set_mode((900, 500),flags)
 BACKGROUND = (28, 22, 79)
-bg = p.image.load("Assets\\background.jpeg")
+bg = p.image.load("Assets\\grassbg.jpeg")
 
 
 clock = p.time.Clock()
