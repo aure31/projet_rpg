@@ -13,7 +13,7 @@ vision centrée sur le joueur
 #### · déplacement :
 deplacement en 2d (haut,bas,gauche,droite <=> z,s,q,d)
 
-#### interractions entre joueurs :
+#### · interractions entre joueurs :
 pvp libre sur toute la map
 pvp désactivable pendant un certain lapse de temps suite à la première mort après la connection
 système de clan/guilde
