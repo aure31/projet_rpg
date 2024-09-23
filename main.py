@@ -13,7 +13,7 @@ global WIDTH
 global HEIGHT
 WIDTH ,HEIGHT = WIN.get_size()
 BACKGROUND = (28, 22, 79)
-bg = p.image.load("Assets\\background.jpeg")
+bg = p.image.load("Assets\\grassbg.jpg")
 
 
 clock = p.time.Clock()
