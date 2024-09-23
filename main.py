@@ -8,7 +8,7 @@ p.font.init()
 FPS = 30
 flags = p.RESIZABLE
 #crée une fenetre de taille (900,500)px dont on peut modifier la taille
-WIN = p.display.set_mode((900, 500),flags,vsync=1 )
+WIN = p.display.set_mode((900, 500),flags)
 BACKGROUND = (28, 22, 79)
 
 clock = p.time.Clock()
@@ -32,7 +32,7 @@ def main():
     	# ...
 
 		#colorie le fond en violet
-		WIN.fill("purple")  # Fill the display with a solid color
+		WIN.fill(0)  # Fill the display with a solid color
 		#crée un text puis l'affiche
 		tex = t.texte(["je t'aime mon bb"],WIDTH/2,HEIGHT/2,90,(255, 135, 247))
 		tex.affiche(WIN)
