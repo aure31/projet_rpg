@@ -9,6 +9,9 @@ FPS = 30
 flags = p.RESIZABLE
 #crée une fenetre de taille (900,500)px dont on peut modifier la taille
 WIN = p.display.set_mode((900, 500),flags)
+global WIDTH 
+global HEIGHT
+WIDTH ,HEIGHT = WIN.get_size()
 BACKGROUND = (28, 22, 79)
 bg = p.image.load("Assets\\background.jpeg")
 
@@ -18,7 +21,7 @@ p.display.set_caption('Hello World!')
 
 def main():
 	#taille de l'ecran
-	WIDTH , HEIGHT = WIN.get_size()
+	 
 	while True:
     	# Process player inputs.
 		# event (evenement qui se passe)
@@ -28,7 +31,10 @@ def main():
 				raise SystemExit
 			#quand la taille est changer
 			if event.type == p.VIDEORESIZE :
+				print("resize")
 				WIDTH ,HEIGHT = WIN.get_size()
+				p.transform.scale(bg,(WIDTH,HEIGHT))
+				print("resize2")
 
     	# Do logical updates here.
     	# ...
@@ -36,6 +42,7 @@ def main():
 		#colorie le fond en violet
 		WIN.blit(bg,(0,0))  # Fill the display with a solid color
 		#crée un text puis l'affiche
+		print(p.display.get_surface())
 		tex = t.texte(["je t'aime mon bb"],WIDTH/2,HEIGHT/2,90,(255, 135, 247))
 		tex.affiche(WIN)
     	# Render the graphics here.
