@@ -4,10 +4,9 @@ import os
 WHITE = (255,255,255)
 
 pygame.mixer.init()
-click_sound = pygame.mixer.Sound(os.path.join('Assets', 'click.wav'))
+click_sound = pygame.mixer.Sound(os.path.join('Assets', 'click2.ogg'))
 click_sound.set_volume(0.8)
 #all class for graphique elements
-
 
 #class for put somme text in the screen
 class texte:
@@ -196,7 +195,7 @@ class cir_text_button(cir_button,texte):
       
 # make a button with a text in the middle      
 class text_button(rect_button,texte):
-    def __init__(self,text:list,coord:tuple,scale:int | tuple,color:tuple,width=0,border_width=0,border_color=(0,0,0)):
+    def __init__(self,text:list,coord:tuple,scale:int,color:tuple,width=0,border_width=0,border_color=(0,0,0)):
         if isinstance(scale, int):
           scale = (scale,scale)
         rect_button.__init__(self,coord,scale,color,border_width,border_color)
