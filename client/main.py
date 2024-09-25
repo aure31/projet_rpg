@@ -1,6 +1,7 @@
 import pygame as p
 import tools as t
 import os
+from network import *
 
 print('start')
 
@@ -17,8 +18,11 @@ bg = p.image.load(os.path.join('Assets', 'grassbg.jpg'))
 clock = p.time.Clock()
 p.display.set_caption('Hello World!')
 
-def test():
-	print("test")
+
+def draw_window(win, text):
+	win.fill(BACKGROUND)
+	win.blit(text, (0, 0))
+	p.display.update()
 
 def main():
 	#taille de l'ecran
@@ -26,6 +30,10 @@ def main():
 	global HEIGHT
 	WIDTH ,HEIGHT = WIN.get_size()
 	localBG = p.transform.scale(bg,(WIDTH,HEIGHT))
+
+	n = Network()
+	startPos = n.getPos()
+
 	while True:
 		# Process player inputs.
 		# event (evenement qui se passe)
