@@ -1,0 +1,1 @@
+Faire un système de zoom qui permet au joueur de zoomer/dézoomer sur lui avec une certaine limite
