@@ -1,33 +1,72 @@
 import pygame as p
+import time as t
 
 class anim_sprite():
-    def __init__(self,img:p.Surface,coord:tuple,Scale:int,fps:int):
+    def __init__(self,img:p.Surface,coord:p.Vector2,Scale:int,fps:int = -1):
         super().__init__()
-        print(img.get_size(),coord,Scale) 
+
         self.img = p.transform.scale(img, (img.get_width()*Scale, img.get_height()*Scale))
         self.width = self.img.get_width()
         self.height = self.img.get_height()
-        self.tcoord = (coord[0]-5,coord[1]-5)
-        self.coord = (coord[0]-self.height/2,coord[1]-self.height/2)
+        self.coord = p.Vector2(coord.x-self.height/2,coord.y-self.height/2)
         self.rect = p.Rect(0,0,self.height,self.height)
         self.size = self.height
         self.max_frame = self.img.get_width() // self.size
-        self.fps = fps
+        self.fps_time = 1000/fps
+        self.last_time = get_time_millis()
         self.frame = 0
-        self.count = 0
         self.scale = Scale
-        print(self.rect.size,coord,Scale)
+        self.anim = 0
 
-    def draw(self, win):
+    def draw(self, win:p.Surface):
         win.blit(self.img, self.coord,\
                   self.rect.move(self.size*self.frame, 0))
-        image = p.Surface((10, 10))
-        image.fill((255, 255, 255))
-        win.blit(image,self.tcoord)
-        self.count += 1
-        if self.count >= self.fps:
-            self.count = 0
-            self.frame += 1
+        self.next_frame()
+        
+
+    def next_frame(self):
+        if self.fps_time <= 0 or (not get_time_millis() - self.last_time >= self.fps_time):
+             return
+        
+        self.last_time = get_time_millis()
+        self.frame += 1
         if self.frame >= self.max_frame:
             self.frame = 0
-        
+    
+    def set_frame(self,frame:int):
+        self.frame = frame
+
+    def set_anim(self,anim:int):
+        self.anim = anim
+    
+    def get_pos(self):
+        return self.coord
+
+    def set_pos(self,coord):
+        self.coord = (coord[0]-self.height/2,coord[1]-self.height/2)
+
+
+class entity(anim_sprite):
+    def __init__(self,img: p.Surface,coord:tuple,Scale:float,fps:int,speed:float):
+        super().__init__(img,coord,Scale,fps)
+        self.speed = speed
+
+    def draw(self,win):
+        super().draw(win)
+
+    
+
+    def move_pos(self,vec2:p.Vector2):
+        self.coord[0] += vec2.x
+        self.coord[1] += vec2.y
+
+    def get_speed(self):
+        return self.speed
+
+    def set_speed(self,speed):
+        self.speed = speed
+        print(self.speed)
+
+
+def get_time_millis():
+    return round(t.time() * 1000)
