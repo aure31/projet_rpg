@@ -9,7 +9,7 @@ from tile import *
 
 print('start')
 bg = p.image.load(os.path.join('Assets', 'grassbg.jpg'))
-player_img = p.image.load(os.path.join('Assets','textures','entities', 'golden_gobelin_sprites-52x52.png'))
+player_img = p.image.load(os.path.join('Assets','textures','entities', 'golden_gobelin_sprites.png'))
 
 main_caractere = c.Caracter(6,2)
 
