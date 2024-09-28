@@ -6,7 +6,9 @@ class Network:
         self.server = "127.0.0.1"
         self.port = 5555
         self.addr = (self.server, self.port)
-        self.pos = self.connect()
+        self.pos = (0,0)
+        self.pseudo = "test"
+        self.player = self.connect()
 
     def getPos(self):
         return self.pos
@@ -14,6 +16,8 @@ class Network:
     def connect(self):
         try:
             self.client.connect(self.addr)
+            self.client.recv(1024).decode()
+            self.client.send(str.encode(self.pseudo))
             return self.client.recv(2048).decode()
         except:
             pass
@@ -24,3 +28,9 @@ class Network:
             return self.client.recv(2048).decode()
         except socket.error as e:
             print(e)
+
+
+def recive_packet(data:bytes):
+    decode = data.decode("utf-8")
+    split = decode.split("/")
+    return split[0],split[1]

@@ -1,7 +1,7 @@
 import pygame as p
 import tools as t
 import os
-from network import *
+from client.connection.network import *
 import anim as a
 import caracter as c
 from Screen import *
@@ -17,11 +17,8 @@ main_caractere = c.Caracter(6,2)
 clock = p.time.Clock()
 p.display.set_caption('Hello World!')
 
-
 def draw_window(win):
-	#win.blit(localBG,(0,0))
 	Screen.draw()
-	#anim_test.draw(win)
 	main_caractere.draw(win)
 
 def main():
@@ -32,7 +29,7 @@ def main():
 	localBG = p.transform.scale(bg,(s.WIDTH,s.HEIGHT))
 
 	n = Network()
-	startPos = n.getPos() # Get the starting position from the server
+	s.set_coord = n.getPos() # Get the starting position from the server
 
 	while True:
 		# Process player inputs.
@@ -49,7 +46,7 @@ def main():
 
 		# Do logical updates here.
 		# ...
-
+		
 		#colorie le fond en violet
 		#WIN.fill("violet")
 		# Render the graphics here.

@@ -11,19 +11,19 @@ class Caracter(a.anim_sprite):
 
     def move(self, direction:p.Vector2):
         if direction == 'up':
-            s.CAM[1] -= self.speed
+            s.move(0,-self.speed)
         elif direction == 'down':
-            s.CAM[1] += self.speed
+            s.move(0,self.speed)
         elif direction == 'left':
-            s.CAM[1][0] -= self.speed
+            s.move(-self.speed,0)
         elif direction == 'right':
-            s.CAM[1][0] += self.speed
+            s.move(self.speed,0)
 
     def draw(self, win):
         super().draw(win)
 
+
     def get_speed(self):
         return self.speed
-
     def set_speed(self, speed):
         self.speed = speed

@@ -1,6 +1,9 @@
 import socket
+import _socket
 from _thread import *
 import time
+from packet import *
+from player import *
 
 server = "127.0.0.1"
 port = 5555
@@ -14,8 +17,11 @@ except socket.error as e:
 s.listen()
 print("Waiting for a connection, Server Started")
 
-def threaded_client(conn):
-    conn.send(str.encode("Connected"))
+def threaded_client(conn:_socket.socket):
+    conn.send(str.encode(str(packet(send_packet_type.PING, ""))))
+    data = conn.recv(2048)
+
+    player = Player()
     reply = ""
     while True:
         try:
@@ -39,4 +45,4 @@ while True:
     conn, addr = s.accept()
     print("Connected to:", addr)
 
-    start_new_thread(threaded_client, (conn,))
+    start_new_thread(threaded_client, conn)
