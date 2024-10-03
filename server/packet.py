@@ -25,7 +25,7 @@ class receive_packet_type(Enum):
         return receive_packet_type._value2member_map_[val]
 
 
-class send_packet:
+class packet:
     def __init__(self,packet_type:send_packet_type,data:str):
         self.packet_type = packet_type
         self.data = data
@@ -36,31 +36,35 @@ class send_packet:
     def bytes_to_packet(data:bytes):
         decode = data.decode("utf-8")
         split = decode.split("/")
-        return send_packet(send_packet_type.get(split[0]),split[1])
+        return packet(send_packet_type.get(split[0]),split[1])
     
-class ping_packet(send_packet):
+    def encode(self):
+        return str.encode(str(self))
+
+    
+class ping_packet(packet):
     def __init__(self):
         super().__init__(send_packet_type.PING,"")
 
-class disconnect_packet(send_packet):
+class disconnect_packet(packet):
     def __init__(self):
         super().__init__(send_packet_type.DISCONNECT,"")
 
-class new_entity_packet(send_packet):
+class new_entity_packet(packet):
     def __init__(self,entity:Server_entity):
         super().__init__(send_packet_type.NEW_ENTITY,str(entity))
 
-class spawn_packet(send_packet):
+class spawn_packet(packet):
     from player import Player
     def __init__(self,player:Player):
         super().__init__(send_packet_type.SPAWN,player.packet())
 
-class update_map(send_packet):
+class update_map(packet):
     from player import Player
     def __init__(self,map:int[Player.render_distance][Player.render_distance]):
         super().__init__(send_packet_type.MAP,str(map))
 
-class update_pos(send_packet):
+class update_pos(packet):
     from player import Player
     def __init__(self,player:Player):
         super().__init__(send_packet_type.UPDATE_POS,player.packet())
