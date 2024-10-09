@@ -5,21 +5,21 @@ from connection.network import *
 import anim as a
 import caracter as c
 from Screen import *
-from tile import *
 
 print('start')
 bg = p.image.load(os.path.join('Assets', 'grassbg.jpg'))
-player_img = p.image.load(os.path.join('Assets','textures','entities', 'golden_gobelin_sprites.png'))
+player_img = p.image.load(os.path.join('Assets','textures','entities', 'player_sprites.png'))
 
-main_caractere = c.Caracter(6,2)
+main_caractere = c.Caracter(1.5,1.2)
 
 
 clock = p.time.Clock()
 p.display.set_caption('Hello World!')
 
-def draw_window(win):
-	Screen.draw()
-	main_caractere.draw(win)
+def draw_window(s:Screen):
+	s.draw()
+	main_caractere.draw(s.WIN)
+	
 
 def main():
 	#taille de l'ecran
@@ -29,12 +29,17 @@ def main():
 	localBG = p.transform.scale(bg,(s.WIDTH,s.HEIGHT))
 
 	n = Network()
-	s.set_coord = n.getPos() # Get the starting position from the server
+	#s.set_coord(n.getPos()) # Get the starting position from the server
 
 	while True:
 		# Process player inputs.
 		# event (evenement qui se passe)
 		for event in p.event.get():
+			if event.type == p.KEYDOWN:
+				main_caractere.pressed_key(event.key,True)
+			if event.type == p.KEYUP:
+				main_caractere.pressed_key(event.key,False)
+
 			if event.type == p.QUIT:
 				p.quit()
 				raise SystemExit
@@ -46,12 +51,13 @@ def main():
 
 		# Do logical updates here.
 		# ...
+		main_caractere.move()
 		
 		#colorie le fond en violet
 		#WIN.fill("violet")
 		# Render the graphics here.
 		# ...
-		draw_window(s.WIN)
+		draw_window(s)
 
 		p.display.flip()  # Refresh on-screen display
 		#permet de faire attendre la boucle pour attaindre FPS par second
