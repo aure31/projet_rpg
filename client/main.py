@@ -1,7 +1,7 @@
 import pygame as p
 import tools as t
 import os
-from client.connection.network import *
+from connection.network import *
 import anim as a
 import caracter as c
 from Screen import *

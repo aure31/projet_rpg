@@ -1,11 +1,13 @@
 import pygame as p
+import os
 
 map =[]
 
+tilePath = os.path.join("Assets","tiles")
 class tile(enumerate):
-    Grass = p.image.load("client/assets/grass.png")
-    Dirt = p.image.load("client/assets/dirt.png")
-    Water = p.image.load("client/assets/water.png")
+    Grass = p.image.load(tilePath+"/texturregrass.png")
+    Dirt = p.image.load(tilePath+"/dirt.png")
+    Water = p.image.load(tilePath+"/water.png")
 
 
 def load_map():
