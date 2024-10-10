@@ -20,7 +20,7 @@ class anim_sprite():
 
     def draw(self, win:p.Surface):
         win.blit(self.img, self.coord,\
-                  self.rect.move(self.size*self.frame, 0))
+                self.rect.move(self.size*self.frame, 0))
         self.next_frame()
         
 
@@ -53,8 +53,6 @@ class entity(anim_sprite):
 
     def draw(self,win):
         super().draw(win)
-
-    
 
     def move_pos(self,vec2:p.Vector2):
         self.coord[0] += vec2.x

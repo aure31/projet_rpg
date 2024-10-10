@@ -1,5 +1,5 @@
 import pygame as p
-import tools as t
+#import tools as t
 import os
 from connection.network import *
 import anim as a
@@ -10,7 +10,7 @@ print('start')
 bg = p.image.load(os.path.join('Assets', 'grassbg.jpg'))
 player_img = p.image.load(os.path.join('Assets','textures','entities', 'player_sprites.png'))
 
-main_caractere = c.Caracter(1.5,1.2)
+
 
 
 clock = p.time.Clock()
@@ -18,7 +18,7 @@ p.display.set_caption('Hello World!')
 
 def draw_window(s:Screen):
 	s.draw()
-	main_caractere.draw(s.WIN)
+	c.main_caractere.draw(s.WIN)
 	
 
 def main():
@@ -36,9 +36,9 @@ def main():
 		# event (evenement qui se passe)
 		for event in p.event.get():
 			if event.type == p.KEYDOWN:
-				main_caractere.pressed_key(event.key,True)
+				c.main_caractere.pressed_key(event.key,True)
 			if event.type == p.KEYUP:
-				main_caractere.pressed_key(event.key,False)
+				c.main_caractere.pressed_key(event.key,False)
 
 			if event.type == p.QUIT:
 				p.quit()
@@ -51,7 +51,7 @@ def main():
 
 		# Do logical updates here.
 		# ...
-		main_caractere.move()
+		c.main_caractere.move()
 		
 		#colorie le fond en violet
 		#WIN.fill("violet")
