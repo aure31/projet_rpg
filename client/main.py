@@ -1,7 +1,6 @@
 import pygame as p
 #import tools as t
 import os
-from connection.network import *
 import anim as a
 import caracter as c
 from Screen import *
@@ -27,9 +26,6 @@ def main():
 	global anim_test
 	anim_test = a.anim_sprite(player_img,s.CENTER,1.8,5)
 	localBG = p.transform.scale(bg,(s.WIDTH,s.HEIGHT))
-
-	n = Network()
-	#s.set_coord(n.getPos()) # Get the starting position from the server
 
 	while True:
 		# Process player inputs.

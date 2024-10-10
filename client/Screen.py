@@ -1,6 +1,5 @@
 import pygame as p
 from tile import *
-from caracter import main_caractere
 
 class Screen:
     def __init__(self, width, height,fps):
@@ -9,7 +8,6 @@ class Screen:
         self.WIDTH = width
         self.HEIGHT = height
         self.coord:tuple[float] = (0,0)
-        self.centerMap:tuple[int,int] = (map_size[0]/2,map_size[1]/2)
         self.FPS = fps
         flags = p.RESIZABLE
         #crée une fenetre de taille (900,500)px dont on peut modifier la taille
@@ -33,17 +31,10 @@ class Screen:
         for x in range(map_size[0]):
             for y in range(map_size[1]):
                 tile = map[x][y]
-                self.WIN.blit(p.transform.scale(tile,self.tile_size),self.calc_map_coord(x,y))
+                self.WIN.blit(p.transform.scale(tile,(self.tile_size,self.tile_size)),(x,y))
 
     def set_coord(self, x:int, y:int):
         self.coord = (x,y)
-
-
-    def calc_map_coord(self,x,y) -> tuple[int,int]:
-        relativeX = (x - self.centerMap[0]) * self.tile_size + self.CENTER + main_caractere.
-        relativeY = (y - self.centerMap[1]) * self.tile_size + self.CENTER
-        return (relativeX , relativeY)
-                
 
     def move(self, x:int, y:int):
         self.coord = (self.coord[0]+x , self.coord[1]+y)

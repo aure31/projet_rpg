@@ -1,10 +1,12 @@
 import pygame as p
 import anim as a
 import os
-from Screen import *
+from Screen import s
+
 
 class Caracter(a.anim_sprite):
     def __init__(self, speed, scale):
+        
         img = p.image.load(os.path.join('Assets','textures','entities', 'player_sprites.png'))
         super().__init__(img, s.CENTER, scale , -1)
         self.speed = speed
