@@ -1,4 +1,4 @@
-import Screen as scr
+import Affichage as scr
 class Player():
     def __init__(self,username,coo=[scr.s.CENTER.x,scr.s.CENTER.y],hp=50,money=0,inventory={'sword':None,'shield':None}):
         """
