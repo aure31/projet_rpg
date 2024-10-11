@@ -1,6 +1,6 @@
-import Affichage as scr
+# import Affichage as scr
 class Player():
-    def __init__(self,username,coo=[scr.s.CENTER.x,scr.s.CENTER.y],hp=50,money=0,inventory={'sword':None,'shield':None}):
+    def __init__(self,username,coo=["scr.s.CENTER.x,scr.s.CENTER.y"],hp=50,money=0,inventory={'sword':None,'shield':None}):
         """
         Constructeur de la classe Player.
         Initialise un joueur avec un nom d'utilisateur, des coordonnées, des points de vie, de l'argent et un inventaire.
@@ -60,6 +60,22 @@ class Player():
         else :
             self.inventory[item]+=1
 
+
+
+class Enemy():
+    def __init__(self,index="goblin",hp=5,ad=2):
+        self.index = index
+        self.hp = hp
+        self.ad= ad
+        
+Enemy_list = {"goblin":Enemy(),"gargouille":Enemy("gargouille",15,8)}
+
+def get_enemy_list():
+    ch = ""
+    for elem in Enemy_list:
+        ch+=f"===== index : {elem} =====\nhp : {Enemy_list[elem].hp}\nattack damage : {Enemy_list[elem].ad}\n"
+    print(f'Voici la liste des ennemis présents et utilisables dans le jeu ainsi que leur caractéristiques :\n{ch}=====')
+
 def jeu_de_test_joueur():
     joueur = Player('Adrien')
     # print(joueur)
@@ -71,4 +87,4 @@ def jeu_de_test_joueur():
     print(joueur)
     print(joueur.is_dead())
 
-jeu_de_test_joueur()
+get_enemy_list()
