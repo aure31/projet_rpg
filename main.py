@@ -3,7 +3,7 @@ import pygame as p
 import os
 import anim as a
 import caracter as c
-from Screen import *
+from Affichage import *
 
 print('start')
 bg = p.image.load(os.path.join('Assets', 'grassbg.jpg'))
