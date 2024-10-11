@@ -9,7 +9,7 @@ class Screen:
         p.font.init()
         self.WIDTH = width
         self.HEIGHT = height
-        self.coord:tuple[float] = (0,0)
+        self.coord:tuple[int] = (0,0)
         self.FPS = fps
         flags = p.RESIZABLE
         #crée une fenetre de taille (900,500)px dont on peut modifier la taille
@@ -19,6 +19,7 @@ class Screen:
         self.map:Map = None
         self.zoom = 1
         p.display.set_icon(p.image.load(os.path.join('Assets','logo.png')))
+        self.relative = [0.5,0.5]
 
     def draw(self):
         self.WIN.fill(self.BACKGROUND)
@@ -33,8 +34,30 @@ class Screen:
         self.coord = (x,y)
 
     def move(self, x:int, y:int):
-        self.coord = (self.coord[0]+x , self.coord[1]+y)
-        #print(self.coord)
+        print(self.coord,self.relative)
+        print(x,y)
+        self.relative[0] += x/self.map.tile_size
+        self.relative[1] += y/self.map.tile_size
+        print(self.coord,self.relative)
+        rx, ry = self.coord
+        if self.relative[0] > 1.0:
+            print('1')
+            self.relative[0] -= 1
+            rx -=1
+        if self.relative[0] < 0.0 :
+            print('3')
+            self.relative[0] = 1 + self.relative[0]
+            rx +=1
+        if self.relative[1] >1.0 :
+            print('2')
+            self.relative[1] -= 1
+            ry -=1
+        if self.relative[1] < 0.0 :
+            print('4')
+            self.relative[1] = 1 + self.relative[1]
+            ry +=1
+        self.coord = (rx, ry)
+        print(self.coord,self.relative)
 
     def update(self):
         print(s.WIN.get_size())
@@ -66,18 +89,22 @@ class Caracter(a.anim_sprite):
                 self.pressed[3] = pressed
 
     def move(self):
+        offset = p.Vector2(0,0)
         if self.pressed[0]:
             print('up')
-            self.cal_move(0,-self.speed)
+            offset.y -= 1
         if self.pressed[1]:
             print('down')
-            self.cal_move(0,self.speed)
+            offset.y += 1
         if self.pressed[2]:
             print('left')
-            self.cal_move(-self.speed,0)
+            offset.x -= 1
         if self.pressed[3]:
             print('right')
-            self.cal_move(self.speed,0)
+            offset.x += 1
+        if offset.length() > 0:
+            offset = offset.normalize()
+            self.cal_move(offset.x*self.speed,offset.y*self.speed)
             
 
     def draw(self, win):
@@ -85,12 +112,7 @@ class Caracter(a.anim_sprite):
 
     def cal_move(self,x,y):
         s.move(x,y)
-        self.relative[0] =+ x
-        self.relative[1] =+ y
-        if self.relative[0] >= 1 :
-            self.relative[0] -= 1
-        if self.relative[1] >=1 :
-            self.relative[1] -= 1
+        
 
     def get_speed(self):
         return self.speed
@@ -100,10 +122,10 @@ class Caracter(a.anim_sprite):
 
     def updatePos(self):
         print(s.CENTER)
-        self.coord = s.CENTER
+        self.set_pos(s.CENTER.x,s.CENTER.y)
 
 
-main_caractere = Caracter(1.5,1)
+main_caractere = Caracter(10,1)
 
 
 class Map:
@@ -116,8 +138,8 @@ class Map:
         '''
         transforme la coordornée de la matrice en coordonée de l'écran
         '''
-        relativeX = (x - self.centerMap[0]) * self.tile_size + main_caractere.relative[0] + (s.CENTER.x - self.tile_size/2)
-        relativeY = (y - self.centerMap[1]) * self.tile_size + main_caractere.relative[1] + (s.CENTER.y - self.tile_size/2)
+        relativeX = ((x - self.centerMap[0]) + (s.coord[0] - s.relative[0])) * self.tile_size
+        relativeY = ((y - self.centerMap[1]) + (s.coord[1] - s.relative[1])) * self.tile_size 
 
         return (relativeX,relativeY)
     

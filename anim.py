@@ -42,8 +42,8 @@ class anim_sprite():
     def get_pos(self):
         return self.coord
 
-    def set_pos(self,coord):
-        self.coord = (coord[0]-self.height/2,coord[1]-self.height/2)
+    def set_pos(self,x,y):
+        self.coord = (x-self.height/2,y-self.height/2)
 
 
 class entity(anim_sprite):

@@ -8,9 +8,6 @@ print('start')
 bg = p.image.load(os.path.join('Assets', 'grassbg.jpg'))
 player_img = p.image.load(os.path.join('Assets','textures','entities', 'player_sprites.png'))
 
-
-
-
 clock = p.time.Clock()
 p.display.set_caption('Hello World!')
 
