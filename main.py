@@ -40,9 +40,7 @@ def main():
 				raise SystemExit
 			#quand la taille est changer
 			if event.type == p.VIDEORESIZE :
-				WIDTH ,HEIGHT = s.WIN.get_size()
-				s.CENTER.update(WIDTH/2, HEIGHT/2)
-				localBG = p.transform.scale(bg,(WIDTH,HEIGHT))
+				s.update()
 
 		# Do logical updates here.
 		# ...

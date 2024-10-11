@@ -10,6 +10,7 @@ click_sound.set_volume(0.8)
 
 #class for put somme text in the screen
 class texte:
+  
   def initialisation(self):
     self.bold = False
     self.italic = False

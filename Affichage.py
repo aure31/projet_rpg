@@ -18,6 +18,7 @@ class Screen:
         self.CENTER = p.Vector2(self.WIDTH/2, self.HEIGHT/2)
         self.map:Map = None
         self.zoom = 1
+        p.display.set_icon(p.image.load(os.path.join('Assets','logo.png')))
 
     def draw(self):
         self.WIN.fill(self.BACKGROUND)
@@ -34,6 +35,12 @@ class Screen:
     def move(self, x:int, y:int):
         self.coord = (self.coord[0]+x , self.coord[1]+y)
         #print(self.coord)
+
+    def update(self):
+        print(s.WIN.get_size())
+        self.WIDTH ,self.HEIGHT = s.WIN.get_size()
+        s.CENTER.update(self.WIDTH/2, self.HEIGHT/2)
+        main_caractere.updatePos()
     
 s = Screen(900,500,30)
 
@@ -91,8 +98,12 @@ class Caracter(a.anim_sprite):
     def set_speed(self, speed):
         self.speed = speed
 
+    def updatePos(self):
+        print(s.CENTER)
+        self.coord = s.CENTER
 
-main_caractere = Caracter(1.5,1.2)
+
+main_caractere = Caracter(1.5,1)
 
 
 class Map:
