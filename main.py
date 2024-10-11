@@ -2,7 +2,6 @@ import pygame as p
 #import tools as t
 import os
 import anim as a
-import caracter as c
 from Affichage import *
 
 print('start')
@@ -17,7 +16,7 @@ p.display.set_caption('Hello World!')
 
 def draw_window(s:Screen):
 	s.draw()
-	c.main_caractere.draw(s.WIN)
+	main_caractere.draw(s.WIN)
 	
 
 def main():
@@ -32,9 +31,9 @@ def main():
 		# event (evenement qui se passe)
 		for event in p.event.get():
 			if event.type == p.KEYDOWN:
-				c.main_caractere.pressed_key(event.key,True)
+				main_caractere.pressed_key(event.key,True)
 			if event.type == p.KEYUP:
-				c.main_caractere.pressed_key(event.key,False)
+				main_caractere.pressed_key(event.key,False)
 
 			if event.type == p.QUIT:
 				p.quit()
@@ -47,7 +46,7 @@ def main():
 
 		# Do logical updates here.
 		# ...
-		c.main_caractere.move()
+		main_caractere.move()
 		
 		#colorie le fond en violet
 		#WIN.fill("violet")

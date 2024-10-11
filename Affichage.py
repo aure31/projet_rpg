@@ -1,5 +1,4 @@
 import pygame as p
-from map import map
 from tile import *
 import anim as a
 import os
@@ -17,17 +16,16 @@ class Screen:
         self.WIN = p.display.set_mode((width, height),flags)
         self.BACKGROUND = (28, 22, 79)
         self.CENTER = p.Vector2(self.WIDTH/2, self.HEIGHT/2)
-        self.map = map()
+        self.map:Map = None
         self.zoom = 1
-        self.tile_size = self.map.tile_size
 
     def draw(self):
         self.WIN.fill(self.BACKGROUND)
-        self.draw_map()
+        self.map.draw_map(self.WIN)
 
     def set_zoom(self,zoom:int):
         self.zoom = zoom
-        self.tile_size = tile_size*zoom
+        self.map.tile_size = tile_size*zoom
         
 
     def set_coord(self, x:int, y:int):
@@ -97,7 +95,7 @@ class Caracter(a.anim_sprite):
 main_caractere = Caracter(1.5,1.2)
 
 
-class map:
+class Map:
 
     def __init__(self):
         self.centerMap:tuple[int,int] = (map_size[0]/2,map_size[1]/2)
@@ -107,8 +105,8 @@ class map:
         '''
         transforme la coordornée de la matrice en coordonée de l'écran
         '''
-        relativeX = (x - self.centerMap[0]) * self.tile_size + main_caractere.relative[0] + (s.CENTER - self.tile_size/2)
-        relativeY = (y - self.centerMap[1]) * self.tile_size + main_caractere.relative[1] + (s.CENTER - self.tile_size/2)
+        relativeX = (x - self.centerMap[0]) * self.tile_size + main_caractere.relative[0] + (s.CENTER.x - self.tile_size/2)
+        relativeY = (y - self.centerMap[1]) * self.tile_size + main_caractere.relative[1] + (s.CENTER.y - self.tile_size/2)
 
         return (relativeX,relativeY)
     
@@ -116,5 +114,6 @@ class map:
         for x in range(map_size[0]):
             for y in range(map_size[1]):
                 tile = map[x][y]
-                win.blit(p.transform.scale(tile,(self.tile_size,self.tile_size)),(x,y)) 
+                win.blit(p.transform.scale(tile,(self.tile_size,self.tile_size)),self.calc_map_coord(x,y)) 
 
+s.map = Map()

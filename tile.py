@@ -24,4 +24,3 @@ map_size = get_map_size()
 tile_size = tile.Grass.get_height()
 
 dict = {1:tile.Grass, 2:tile.Sand, 3:tile.Stone}
-
