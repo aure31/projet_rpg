@@ -4,13 +4,13 @@ import anim as a
 import os
 from math import ceil
 
+debug = False
 class Screen:
     def __init__(self, width, height,fps):
         p.init()
         p.font.init()
         self.WIDTH = width
         self.HEIGHT = height
-        self.coord:tuple[int] = (0,0)
         self.FPS = fps
         flags = p.RESIZABLE
         #crée une fenetre de taille (900,500)px dont on peut modifier la taille
@@ -36,6 +36,10 @@ class Screen:
         self.coord = (x,y)
 
     def move(self, x:int, y:int):
+        '''
+        déplace les tiles de x et y pixel sur l'écran
+        up:Y-1, down:Y+1, left:X-1, right:X+1
+        '''
         self.relative[0] += x/self.map.tile_size
         self.relative[1] += y/self.map.tile_size
         rx, ry = (0,0)
@@ -52,9 +56,7 @@ class Screen:
             self.relative[1] = 1 + self.relative[1]
             ry -=1
         if rx != 0 or ry != 0:
-            
-            self.coord = (self.coord[0]+rx, self.coord[1]+ry)
-            self.map.map_move(rx,ry)
+            self.map.tile_box_move(rx,ry)
         
 
     def update(self):
@@ -62,7 +64,7 @@ class Screen:
         self.WIDTH ,self.HEIGHT = s.WIN.get_size()
         s.CENTER.update(self.WIDTH/2, self.HEIGHT/2)
         main_caractere.updatePos()
-        self.map.screen_map = self.map.calc_map_rect()
+        self.map.calc_tile_box()
     
 s = Screen(900,500,30)
 
@@ -73,6 +75,8 @@ class Caracter(a.anim_sprite):
         img = p.image.load(os.path.join('Assets','textures','entities', 'player_sprites.png'))
         super().__init__(img, s.CENTER, scale , 12)
         self.speed = speed/s.FPS
+        #liste des touches pressées
+        #0:up, 1:down, 2:left, 3:right
         self.pressed = [False,False,False,False]
         self.relative = [0.5,0.5]
 
@@ -89,6 +93,7 @@ class Caracter(a.anim_sprite):
 
     def move(self):
         offset = p.Vector2(0,0)
+        #0:up, 1:down, 2:left, 3:right
         if self.pressed[0]:
             offset.y -= 1
         if self.pressed[1]:
@@ -116,56 +121,60 @@ class Caracter(a.anim_sprite):
         self.set_pos(s.CENTER.x,s.CENTER.y)
 
 
-main_caractere = Caracter(100,1)
+main_caractere = Caracter(1000,1)
 
 
 class Map:
-
-    def __init__(self):
-        self.centerMap:tuple[int,int] = (map_size[0]/2,map_size[1]/2)
+    def __init__(self,x=0,y=0):
+        '''
+        initialise la map et met l'ecran sur la tile box (x,y)
+        '''
+        self.x = x
+        self.y = y
         self.tile_size = tile_size
-        self.screen_map = self.calc_map_rect()
-        self.show_map = self.screen_map
+        self.calc_tile_box()
+        
 
     def calc_map_coord(self,x,y) -> tuple[int,int]:
         '''
-        transforme la coordornée de la matrice en coordonée de l'écran
+        transforme la coordornée de la tile box en coordonée de l'écran
         '''
-        relativeX = (x + (s.coord[0] - s.relative[0])) * self.tile_size
-        relativeY = (y + (s.coord[1] - s.relative[1])) * self.tile_size 
+        relativeX = (x - s.relative[0] ) * self.tile_size
+        relativeY = (y - s.relative[1] ) * self.tile_size 
         return (relativeX,relativeY)
     
-    def draw_map(self,win):
-        show_map  = self.show_map
-        print(show_map.x,show_map.width+show_map.x)
-        print(show_map.y,show_map.width+show_map.y)
-        print(self.tile_size)
-        for x in range(show_map.x,show_map.width+show_map.x):
-            for y in range(show_map.y,show_map.height+show_map.y):
-                try:
-                    #print(x,y)
-                    tile = map[x][y]
-                    win.blit(p.transform.scale(tile,(self.tile_size,self.tile_size)),self.calc_map_coord(x,y))
-                except IndexError:
-                    print('error',x,y)
-                    pass
+    def draw_map(self,win:p.Surface):
+        '''
+        dessine la map sur l'écran
+        '''
+        for x in range(self.tile_box.x , self.tile_box.x + self.tile_box.width):
+            for y in range (self.tile_box.y, self.tile_box.y + self.tile_box.height):
+                if x < 0 or y < 0 or x >= map_size[0] or y >= map_size[1]:
+                    continue
+                tile = map[x][y]
+                calc = self.calc_map_coord(x-self.tile_box.x,y-self.tile_box.y)
+                win.blit(p.transform.scale(tile,(self.tile_size,self.tile_size)), calc)
+                if debug:
+                    squared = p.Rect(calc,(self.tile_size,self.tile_size))
+                    #p.draw.rect(win, (255,0,0), squared,2)
 
-
-    def map_move(self,x:int,y:int):
-        self.centerMap = (self.centerMap[0]+x,self.centerMap[1]+y)
-        self.show_map = self.show_map.move(x,y)
-        print(self.show_map.size,map_size)
-        if abs(self.show_map.bottomleft[0]) > map_size[0] or abs(self.show_map.bottomleft[1]) > map_size[1]:
-            print('bad')
-            self.show_map.width = map_size[0] + self.show_map.bottomleft[0]
-            self.show_map.height = map_size[1] + self.show_map.bottomleft[1]
+    def tile_box_move(self,x:int,y:int):
+        '''
+        déplace la tile box de x et y tile dans la matrice
+        '''
+        print(x,y,self.tile_box)
+        self.tile_box = self.tile_box.move(x,y)
         
 
-    def calc_map_rect(self):
-        midX = ceil(s.WIDTH/self.tile_size)
-        midY = ceil(s.HEIGHT/self.tile_size)
-        return p.Rect(s.coord[0],s.coord[1],s.coord[0]+2+midX,s.coord[1]+2+midY)
-        #return p.Rect(0,0,2,2)
+    def calc_tile_box(self):
+        '''
+        calcule la tile box (la zone de la map qui est affichée)
+        '''
+
+        tileWidth = ceil(s.WIDTH/self.tile_size)
+        tileHeight = ceil(s.HEIGHT/self.tile_size)
+        self.tile_box = p.Rect(self.x-1,self.y-1,tileWidth+2,tileHeight+2)
+        print(self.tile_box)
 
 s.map = Map()
 
