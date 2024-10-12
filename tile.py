@@ -1,7 +1,7 @@
 import pygame as p
 import os
 
-map =[]
+
 
 
 tilePath = os.path.join("Assets","textures","tiles")
@@ -12,10 +12,9 @@ class tile(enumerate):
 
 
 def load_map():
-    global map
-    map = [[ tile.Grass for x in range(10)] for y in range(10)]
+    return [[ tile.Grass for x in range(100)] for y in range(100)]
 
-load_map()
+map = load_map()
 
 def get_map_size():
     return (len(map) , len(map[0]))
