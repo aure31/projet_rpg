@@ -70,6 +70,10 @@ class Enemy():
 
 Enemy_list = {"goblin":Enemy(),"gargouille":Enemy("gargouille",15,6,0.8,5,None)}
 
+class NPC():
+    def __init__(self,name):
+        self.name = name
+
 def get_enemy_list():
     ch = ""
     for elem in Enemy_list:
