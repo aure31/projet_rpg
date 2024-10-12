@@ -41,20 +41,20 @@ class Screen:
         rx, ry = (0,0)
         if self.relative[0] > 1.0:
             self.relative[0] -= 1
-            rx -=1
+            rx +=1
         if self.relative[0] < 0.0 :
             self.relative[0] = 1 + self.relative[0]
-            rx +=1
+            rx -=1
         if self.relative[1] >1.0 :
             self.relative[1] -= 1
-            ry -=1
+            ry +=1
         if self.relative[1] < 0.0 :
             self.relative[1] = 1 + self.relative[1]
-            ry +=1
+            ry -=1
         if rx != 0 or ry != 0:
             
             self.coord = (self.coord[0]+rx, self.coord[1]+ry)
-            self.map.map_move(-rx,-ry)
+            self.map.map_move(rx,ry)
         
 
     def update(self):
@@ -104,8 +104,6 @@ class Caracter(a.anim_sprite):
 
     def draw(self, win):
         super().draw(win)
-        
-        
 
     def get_speed(self):
         return self.speed
@@ -118,7 +116,7 @@ class Caracter(a.anim_sprite):
         self.set_pos(s.CENTER.x,s.CENTER.y)
 
 
-main_caractere = Caracter(1000,1)
+main_caractere = Caracter(100,1)
 
 
 class Map:
@@ -133,21 +131,20 @@ class Map:
         '''
         transforme la coordornée de la matrice en coordonée de l'écran
         '''
-        relativeX = (-x + (s.coord[0] - s.relative[0])) * self.tile_size
-        relativeY = (-y + (s.coord[1] - s.relative[1])) * self.tile_size 
+        relativeX = (x + (s.coord[0] - s.relative[0])) * self.tile_size
+        relativeY = (y + (s.coord[1] - s.relative[1])) * self.tile_size 
         return (relativeX,relativeY)
     
     def draw_map(self,win):
         show_map  = self.show_map
         print(show_map.x,show_map.width+show_map.x)
         print(show_map.y,show_map.width+show_map.y)
+        print(self.tile_size)
         for x in range(show_map.x,show_map.width+show_map.x):
             for y in range(show_map.y,show_map.height+show_map.y):
                 try:
                     #print(x,y)
                     tile = map[x][y]
-                    if x == 5 and y == 5:
-                        print(tile)
                     win.blit(p.transform.scale(tile,(self.tile_size,self.tile_size)),self.calc_map_coord(x,y))
                 except IndexError:
                     print('error',x,y)
