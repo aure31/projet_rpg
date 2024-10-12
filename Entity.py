@@ -60,15 +60,15 @@ class Player():
         else :
             self.inventory[item]+=1
 
-
-
 class Enemy():
-    def __init__(self,index="goblin",hp=5,ad=2):
+    def __init__(self,index="goblin",hp=5,ad=2,asp=0.3,range=1,special=None):
         self.index = index
         self.hp = hp
-        self.ad= ad
-        
-Enemy_list = {"goblin":Enemy(),"gargouille":Enemy("gargouille",15,8)}
+        self.ad = ad
+        self.asp = asp
+        self.range = range
+
+Enemy_list = {"goblin":Enemy(),"gargouille":Enemy("gargouille",15,6,0.8,5,None)}
 
 def get_enemy_list():
     ch = ""
