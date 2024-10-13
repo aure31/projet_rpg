@@ -33,7 +33,24 @@ def encode(path):
     img = Image.open(path)
     data = transform_colors(img.getdata())
     result = []
+    tileMap = []
     width , height = img.size
+    for y in range(height):
+        for x in range(width):
+            # => [[tl,t,tr],[l,c,r],[dl,d,dr]]
+            pxcolor = data[y * width + x]
+            # print(f"[{pxcolor[0]},{pxcolor[1]},{pxcolor[2]}]")
+            if pxcolor[0] == 0 and pxcolor[1] == 255 and pxcolor[2] == 0:
+                tileMap.append("Grass")
+            elif pxcolor[0] == 0 and pxcolor[1] == 0 and pxcolor[2] == 255:
+                tileMap.append("Stone")
+            elif pxcolor[0] == 255 and pxcolor[1] == 255 and pxcolor[2] == 0:
+                tileMap.append("Sand")
+            elif pxcolor[0] == 255 and pxcolor[1] == 0 and pxcolor[2] == 0:
+                tileMap.append("Bricks")
+            else:
+                tileMap.append("not bound")
+
     for y in range(height):
         for x in range(width):
             indexs:list[list] =[]
@@ -53,18 +70,7 @@ def encode(path):
                         current.append(None)
                         continue
 
-                    pxcolor = data[i]
-                    # print(f"[{pxcolor[0]},{pxcolor[1]},{pxcolor[2]}]")
-                    if pxcolor[0] == 0 and pxcolor[1] == 255 and pxcolor[2] == 0:
-                        current.append("Grass")
-                    elif pxcolor[0] == 0 and pxcolor[1] == 0 and pxcolor[2] == 255:
-                        current.append("Stone")
-                    elif pxcolor[0] == 255 and pxcolor[1] == 255 and pxcolor[2] == 0:
-                        current.append("Sand")
-                    elif pxcolor[0] == 255 and pxcolor[1] == 0 and pxcolor[2] == 0:
-                        current.append("Bricks")
-                    else:
-                        current.append("not bound")
+                    tile = data[i]
             
             print(f"{current}")
             
