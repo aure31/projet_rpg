@@ -153,7 +153,7 @@ class Map:
                     continue
                 tile = map[x][y]
                 calc = self.calc_map_coord(x-self.tile_box.x,y-self.tile_box.y)
-                win.blit(p.transform.scale(tile,(self.tile_size,self.tile_size)), calc)
+                win.blit(p.transform.scale(tile.img,(self.tile_size,self.tile_size)), calc)
                 if debug:
                     squared = p.Rect(calc,(self.tile_size,self.tile_size))
                     #p.draw.rect(win, (255,0,0), squared,2)
