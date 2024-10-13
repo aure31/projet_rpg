@@ -29,9 +29,23 @@ class Screen:
 
     def set_zoom(self,zoom:int):
         self.zoom = zoom
+        print(zoom)
         self.map.tile_size = tile_size*zoom
         
-
+    def add_zoom(self,zoom:int):
+        if zoom == 0:
+            return
+        zoom = zoom/abs(zoom)
+        zoom *= 0.1
+        if self.zoom + zoom < 0.8 or self.zoom + zoom > 3:
+            return
+        print(self.zoom + zoom,zoom)
+        self.move(-self.map.tile_size/2 * zoom,-self.map.tile_size/2 * zoom)
+        s.set_zoom(self.zoom + zoom)
+        
+        s.map.calc_tile_box()
+        main_caractere.set_scale(self.zoom)
+    
     def set_coord(self, x:int, y:int):
         self.coord = (x,y)
 
@@ -73,9 +87,11 @@ class Caracter(a.anim_sprite):
     def __init__(self, speed:int, scale):
         
         img = p.image.load(os.path.join('Assets','textures','entities', 'player_sprites.png'))
-        super().__init__(img, s.CENTER, scale , 12)
+        super().__init__(img, s.CENTER, scale , -1)
         self.speed = speed/s.FPS
-        #liste des touches pressées
+        self.momuntum = 0
+
+        #liste des touches pressées :
         #0:up, 1:down, 2:left, 3:right
         self.pressed = [False,False,False,False]
         self.relative = [0.5,0.5]
@@ -120,6 +136,7 @@ class Caracter(a.anim_sprite):
         print(s.CENTER)
         self.set_pos(s.CENTER.x,s.CENTER.y)
 
+    
 
 main_caractere = Caracter(1000,1)
 
@@ -156,14 +173,16 @@ class Map:
                 win.blit(p.transform.scale(tile.img,(self.tile_size,self.tile_size)), calc)
                 if debug:
                     squared = p.Rect(calc,(self.tile_size,self.tile_size))
-                    #p.draw.rect(win, (255,0,0), squared,2)
+                    p.draw.rect(win, (255,0,0), squared,2)
 
     def tile_box_move(self,x:int,y:int):
         '''
         déplace la tile box de x et y tile dans la matrice
         '''
-        print(x,y,self.tile_box)
+        #print(x,y,self.tile_box)
         self.tile_box = self.tile_box.move(x,y)
+        self.x += x
+        self.y += y
         
 
     def calc_tile_box(self):
@@ -173,7 +192,7 @@ class Map:
 
         tileWidth = ceil(s.WIDTH/self.tile_size)
         tileHeight = ceil(s.HEIGHT/self.tile_size)
-        self.tile_box = p.Rect(self.x-1,self.y-1,tileWidth+2,tileHeight+2)
+        self.tile_box = p.Rect(self.x-1-tileWidth//2,self.y-1-tileHeight//2,tileWidth+2,tileHeight+2)
         print(self.tile_box)
 
 s.map = Map()

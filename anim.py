@@ -5,7 +5,7 @@ from math import ceil
 class anim_sprite():
     def __init__(self,img:p.Surface,coord:p.Vector2,Scale:int,fps:int = -1):
         super().__init__()
-
+        self.raw_img = img
         self.img = p.transform.scale(img, (img.get_width()*Scale, img.get_height()*Scale))
         self.width = self.img.get_width()
         self.height = self.img.get_height()
@@ -60,6 +60,17 @@ class anim_sprite():
 
     def set_pos(self,x,y):
         self.coord = (x-self.height/2,y-self.height/2)
+
+    def set_scale(self,scale:int):
+        coord = self.coord.update
+        self.img = p.transform.scale(self.raw_img, (self.raw_img.get_width()*scale, self.raw_img.get_height()*scale))
+        self.width = self.img.get_width()
+        self.height = self.img.get_height()
+        self.rect = p.Rect(0,0,self.height,self.height)
+        self.size = self.height
+        self.max_frame = self.img.get_width() // self.size
+        self.scale = scale
+        self.coord = p.Vector2(self.coord.x-self.height/4,self.coord.y-self.height/2)
 
 
 class entity(anim_sprite):

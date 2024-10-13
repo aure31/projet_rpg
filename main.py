@@ -28,6 +28,8 @@ def main():
 				main_caractere.pressed_key(event.key,True)
 			if event.type == p.KEYUP:
 				main_caractere.pressed_key(event.key,False)
+			if event.type == p.MOUSEWHEEL:
+				s.add_zoom(event.y)
 
 			if event.type == p.QUIT:
 				p.quit()
