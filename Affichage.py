@@ -4,7 +4,7 @@ import anim as a
 import os
 from math import ceil
 
-debug = False
+debug = True
 class Screen:
     def __init__(self, width, height,fps):
         p.init()
@@ -35,14 +35,17 @@ class Screen:
     def add_zoom(self,zoom:int):
         if zoom == 0:
             return
+        raw_zoom = zoom
         zoom = zoom/abs(zoom)
         zoom *= 0.1
         if self.zoom + zoom < 0.8 or self.zoom + zoom > 3:
             return
         print(self.zoom + zoom,zoom)
-        self.move(-self.map.tile_size/2 * zoom,-self.map.tile_size/2 * zoom)
-        s.set_zoom(self.zoom + zoom)
         
+        s.set_zoom(self.zoom + zoom)
+        #self.move(-self.map.tile_size/2 * raw_zoom ,-self.map.tile_size/2 * raw_zoom)
+        #self.set_relative(self.relative[0]*zoom,self.relative[1]*zoom)
+        print(self.relative)
         s.map.calc_tile_box()
         main_caractere.set_scale(self.zoom)
     
@@ -72,6 +75,26 @@ class Screen:
         if rx != 0 or ry != 0:
             self.map.tile_box_move(rx,ry)
         
+    def set_relative(self,x,y):
+        print(self.relative)
+        self.relative[0] += x
+        self.relative[1] += y
+        print(self.relative)
+        rx, ry = (0,0)
+        if self.relative[0] > 1.0:
+            self.relative[0] -= int(self.relative[0])
+            rx += int(self.relative[0])
+        if self.relative[0] < 0.0 :
+            self.relative[0] = 1 + self.relative[0] - int(self.relative[0])
+            rx -= int(self.relative[0])
+        if self.relative[1] >1.0 :
+            self.relative[1] -= int(self.relative[1])
+            ry += int(self.relative[1])
+        if self.relative[1] < 0.0 :
+            self.relative[1] = 1 + self.relative[1] - int(self.relative[1])
+            ry -= int(self.relative[1])
+        if rx != 0 or ry != 0:
+            self.map.tile_box_move(rx,ry)
 
     def update(self):
         print(s.WIN.get_size())
@@ -87,7 +110,7 @@ class Caracter(a.anim_sprite):
     def __init__(self, speed:int, scale):
         
         img = p.image.load(os.path.join('Assets','textures','entities', 'player_sprites.png'))
-        super().__init__(img, s.CENTER, scale , -1)
+        super().__init__(img, s.CENTER, scale , -1,p.Rect(84,160,88,96))
         self.speed = speed/s.FPS
         self.momuntum = 0
 
@@ -169,8 +192,8 @@ class Map:
                 if x < 0 or y < 0 or x >= map_size[0] or y >= map_size[1]:
                     continue
                 tile = map[x][y]
-                calc = self.calc_map_coord(x-self.tile_box.x,y-self.tile_box.y)
-                win.blit(p.transform.scale(tile.img,(self.tile_size,self.tile_size)), calc)
+                calc = self.calc_map_coord(x-self.tile_box.x-0.5,y-self.tile_box.y-0.5)
+                win.blit(p.transform.scale(tile.img,(self.tile_size+1,self.tile_size+1)), calc)
                 if debug:
                     squared = p.Rect(calc,(self.tile_size,self.tile_size))
                     p.draw.rect(win, (255,0,0), squared,2)

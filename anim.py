@@ -1,17 +1,24 @@
 import pygame as p
 import time as t
 from math import ceil
-
 class anim_sprite():
-    def __init__(self,img:p.Surface,coord:p.Vector2,Scale:int,fps:int = -1):
-        super().__init__()
+    def __init__(self,img:p.Surface,coord:p.Vector2,Scale:int,fps:int = -1,hitbox:p.Rect = None):
+        
         self.raw_img = img
         self.img = p.transform.scale(img, (img.get_width()*Scale, img.get_height()*Scale))
-        self.width = self.img.get_width()
-        self.height = self.img.get_height()
+        self.raw_rect = hitbox
+        if hitbox == None:
+            self.width = self.img.get_width()
+            self.height = self.img.get_height()
+            self.rect = p.Rect(0,0,self.height,self.height)
+        else:
+            self.rect = hitbox
+            self.width = self.rect.width
+            self.height = self.rect.height
+        self.raw_coord = coord
         self.coord = p.Vector2(coord.x-self.height/2,coord.y-self.height/2)
-        self.rect = p.Rect(0,0,self.height,self.height)
-        self.size = self.height
+        self.rect = hitbox
+        self.size = self.img.get_height()
         self.max_frame = self.img.get_width() // self.size
         self.fps_time = 1000//fps
         self.last_time = get_time_millis()
@@ -23,6 +30,9 @@ class anim_sprite():
         win.blit(self.img, self.coord,\
                 self.rect.move(self.size*self.frame, 0))
         self.next_frame()
+        from Affichage import debug
+        if debug:
+            p.draw.circle(win,(255,0,0),self.raw_coord,5)
         
     def get_height(self):
         pixel = self.img.get_at((ceil(self.width/2),0))
@@ -59,18 +69,23 @@ class anim_sprite():
         return self.coord
 
     def set_pos(self,x,y):
-        self.coord = (x-self.height/2,y-self.height/2)
+        self.coord = p.Vector2(x-self.height/2,y-self.height/2)
+        self.raw_coord = p.Vector2(x,y)
 
     def set_scale(self,scale:int):
-        coord = self.coord.update
         self.img = p.transform.scale(self.raw_img, (self.raw_img.get_width()*scale, self.raw_img.get_height()*scale))
-        self.width = self.img.get_width()
-        self.height = self.img.get_height()
-        self.rect = p.Rect(0,0,self.height,self.height)
+        if self.raw_rect == None:
+            self.width = self.img.get_width()
+            self.height = self.img.get_height()
+            self.rect = p.Rect(0,0,self.height,self.height)
+        else:
+            self.rect = self.raw_rect.scale_by(scale,scale)
+            self.width = self.rect.width
+            self.height = self.rect.height
         self.size = self.height
         self.max_frame = self.img.get_width() // self.size
         self.scale = scale
-        self.coord = p.Vector2(self.coord.x-self.height/4,self.coord.y-self.height/2)
+        self.set_pos(self.raw_coord.x,self.raw_coord.y)
 
 
 class entity(anim_sprite):

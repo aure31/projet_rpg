@@ -46,8 +46,6 @@ Grass_Brick_int_corner_west = tile(p.image.load(tilePath+"/grass-brick-int-corne
 Grass_Brick_int_corner_est = tile(p.image.load(tilePath+"/grass-brick-int-corner-est.png"))
 
 
-
-
 def load_map():
     return [[ Grass for x in range(100)] for y in range(100)]
 
