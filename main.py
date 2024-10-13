@@ -41,7 +41,7 @@ def main():
 		main_caractere.move()
 
 		draw_window(s)
-
+		
 		p.display.flip()  # Refresh on-screen display
 		#permet de faire attendre la boucle pour attaindre FPS par second
 		clock.tick(s.FPS)   

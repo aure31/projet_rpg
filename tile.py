@@ -13,11 +13,11 @@ class rotation:
     _270 = 3
 
 class tile:
-    def __init__(self, img:p.Surface):
+    def __init__(self, img:p.Surface, rotation = 0):
         self.img = img
 
     def set_rotation(self,rotation:int):
-        self.img = p.transform.rotate(self.img,rotation*90)
+        return  tile(p.transform.rotate(self.img,rotation*90))
 
 
 Sand = tile(p.image.load(tilePath+"/sand.png"))

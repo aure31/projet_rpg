@@ -28,8 +28,17 @@ def transform_colors(pixel_list):
     transformed_list = [closest_color(pixel) for pixel in pixel_list]
     return transformed_list
 
+dict_condition = { '["Grass","Grass","Grass","Grass","Grass","Grass","Grass","Grass","Grass"]' : Grass,
+                  '["Grass","Grass","Grass","Grass","Grass","Grass","Grass","Grass","Grass"]' : Grass_Brick_est }
+        
+def tile_condition(current):
+    for e in dict_condition.keys():
+        if current == eval(e):
+            return dict_condition[e]
+    return None
 
 def encode(path):
+    
     img = Image.open(path)
     data = transform_colors(img.getdata())
     result = []
@@ -52,9 +61,18 @@ def encode(path):
                 tileMap.append("not bound")
 
     for y in range(height):
+        result.append([])
         for x in range(width):
             indexs:list[list] =[]
             # => [[tl,t,tr],[l,c,r],[dl,d,dr]]
+            if tileMap[y*width + x] != "Grass" :
+                center = tileMap[y*width + x]
+                if center == "Sand":
+                    result.append(Sand)
+                elif center == "Stone":
+                    result.append(Stone)
+                elif center == "Brick":
+                    result.append(Brick)  
             for y_indice in range(-1,2):
                 indexs.append([])
                 for x_indice in range(-1,2):
@@ -70,9 +88,14 @@ def encode(path):
                         current.append(None)
                         continue
 
-                    tile = data[i]
-            
-            print(f"{current}")
+                    tile = tileMap[i]
+                    current.append(tile)
+
+            result.append(tile_condition(current))
+            # print(f"{current}")
+            # print(tileMap[i])
+
+    print(result)
             
 
 
