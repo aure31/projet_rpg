@@ -11,7 +11,9 @@ class anim_sprite():
             self.width = self.img.get_width()
             self.height = self.img.get_height()
             self.rect = p.Rect(0,0,self.height,self.height)
+            self.ratio = (1,1)
         else:
+            self.ratio = (hitbox.x/self.raw_img.get_height(),hitbox.y/self.raw_img.get_height())
             self.rect = hitbox
             self.width = self.rect.width
             self.height = self.rect.height
@@ -75,16 +77,20 @@ class anim_sprite():
     def set_scale(self,scale:int):
         self.img = p.transform.scale(self.raw_img, (self.raw_img.get_width()*scale, self.raw_img.get_height()*scale))
         if self.raw_rect == None:
-            self.width = self.img.get_width()
+            self.width = self.img.get_height()
             self.height = self.img.get_height()
             self.rect = p.Rect(0,0,self.height,self.height)
         else:
             self.rect = self.raw_rect.scale_by(scale,scale)
+            self.rect.x = self.img.get_height()*self.ratio[0]
+            self.rect.y = self.img.get_height()*self.ratio[1]
             self.width = self.rect.width
             self.height = self.rect.height
+            print("perso",self.rect,scale,self.ratio)
         self.size = self.height
         self.max_frame = self.img.get_width() // self.size
         self.scale = scale
+
         self.set_pos(self.raw_coord.x,self.raw_coord.y)
 
 
