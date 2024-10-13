@@ -54,9 +54,17 @@ dict_condition = { '["Grass","Grass","Grass","Grass","Grass","Grass","Grass","Gr
                    '["Stone","Stone","Stone","Grass","Grass","Stone","Grass","Grass","Stone"]' : Grass_Stone_Int_Corner.set_rotation(rotation._180),
                    '["Stone","Stone","Stone","Stone","Grass","Grass","Stone","Grass","Grass"]' : Grass_Stone_Int_Corner.set_rotation(rotation._270),
                    '["Grass","Grass","Grass","Grass","Grass","Grass","Sand","Sand","Sand"]' : Grass_Sand.set_rotation(rotation._90),
-                   '["Grass","Grass","Sand","Grass","Grass","Sand","Grass","Grass","Sand"]' : Grass_Sand.set_rotation(rotation._180),
-                   '["Sand","Grass","Grass","Sand","Grass","Grass","Sand","Grass","Grass"]' : Grass_Sand,
+                   '["Grass","Grass","Sand","Grass","Grass","Sand","Grass","Grass","Sand"]' : Grass_Sand,
+                   '["Sand","Grass","Grass","Sand","Grass","Grass","Sand","Grass","Grass"]' : Grass_Sand.set_rotation(rotation._180),
                    '["Sand","Sand","Sand","Grass","Grass","Grass","Grass","Grass","Grass"]' : Grass_Sand.set_rotation(rotation._270),
+                   '["Grass","Grass","Grass","Grass","Grass","Grass","Grass","Grass","Sand"]' : Grass_Sand_Ext_Corner,
+                   '["Grass","Grass","Grass","Grass","Grass","Grass","Sand","Grass","Grass"]' : Grass_Sand_Ext_Corner.set_rotation(rotation._90),
+                   '["Sand","Grass","Grass","Grass","Grass","Grass","Grass","Grass","Grass"]' : Grass_Sand_Ext_Corner.set_rotation(rotation._180),
+                   '["Grass","Grass","Sand","Grass","Grass","Grass","Grass","Grass","Grass"]' : Grass_Sand_Ext_Corner.set_rotation(rotation._270),
+                   '["Grass","Grass","Sand","Grass","Grass","Sand","Sand","Sand","Sand"]' : Grass_Sand_Int_Corner,
+                   '["Sand","Grass","Grass","Sand","Grass","Grass","Sand","Sand","Sand"]' : Grass_Sand_Int_Corner.set_rotation(rotation._90),
+                   '["Sand","Sand","Sand","Grass","Grass","Sand","Grass","Grass","Sand"]' : Grass_Sand_Int_Corner.set_rotation(rotation._180),
+                   '["Sand","Sand","Sand","Sand","Grass","Grass","Sand","Grass","Grass"]' : Grass_Sand_Int_Corner.set_rotation(rotation._270),
                    }
         
 def tile_condition(current):
