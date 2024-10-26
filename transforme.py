@@ -1,6 +1,28 @@
 import os
+import csv
 from PIL import Image
 from tile import *
+
+def list_to_csv(l,width):
+    # utilise des ',' comme séparateurs
+    with open('map.csv', mode='w', newline='') as file:
+        writer = csv.writer(file)
+        
+        # Initialiser une ligne vide
+        row = []
+        
+        for element in l:
+            if element != None:
+                row.append(element)
+            # Si la largeur est atteinte, écrire la ligne et réinitialiser
+            if len(row) == width:
+                writer.writerow(row)
+                row = []  # Réinitialiser la ligne
+        
+        # Écrire la dernière ligne si elle n'est pas vide
+        if row:
+            writer.writerow(row)
+
 
 def closest_color(pixel):
     # Définir les couleurs cibles
@@ -97,7 +119,7 @@ def encode(path):
                 tileMap.append("not bound")
 
     for y in range(height):
-        result.append([])
+        # result.append([])
         for x in range(width):
             indexs:list[list] =[]
             # => [[tl,t,tr],[l,c,r],[dl,d,dr]]
@@ -130,11 +152,10 @@ def encode(path):
             result.append(tile_condition(current))
             # print(f"{current}")
             # print(tileMap[i])
-
-    print(result)
+    list_to_csv(result,width)
+    return result
             
 
 
-
-
-encode("Assets\map.png")
+# encode("Assets\map.png")
+# print("all good ")
